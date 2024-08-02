@@ -13,7 +13,7 @@ def filter_datum(
     fields: List[str],
     redaction: str,
     message: str,
-    seperator: str
+    separator: str
 ) -> str:
     """
     Replace certain field values using reqular expression.
@@ -31,7 +31,7 @@ def filter_datum(
         str: Obfuscated string
     """
     for field in fields:
-        pattern = re.compile(f"({field}=)([^{seperator}]*)")
+        pattern = f"({field}=)([^{separator}*])"
         message = re.sub(pattern, r"\1" + redaction, message)
     return message
 
