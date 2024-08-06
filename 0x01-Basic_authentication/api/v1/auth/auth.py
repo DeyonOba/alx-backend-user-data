@@ -11,7 +11,13 @@ class Auth:
         self, path: str, excluded_paths: List[str]
     ) -> bool:
         """Not implemented yet."""
-        return False
+        if not path or not excluded_paths:
+            return True
+
+        for x_path in excluded_paths:
+            if path.rstrip('/') == x_path.rstrip('/'):
+                return False
+        return True
 
     def authorization_header(self, request=None) -> str:
         """Not implemented yet."""
