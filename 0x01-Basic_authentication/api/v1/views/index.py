@@ -44,9 +44,9 @@ def unauthorized():
   methods=['GET'],
   strict_slashes=False
 )
-def unauthorized():
-    """GET /api/v1/unauthorized
+def forbidden():
+    """GET /api/v1/forbidden
 
-    Raises 401 error
+    Raises 403 error
     """
     abort(403)
