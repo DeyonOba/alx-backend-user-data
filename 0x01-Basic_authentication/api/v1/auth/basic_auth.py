@@ -3,6 +3,7 @@
 """
 from api.v1.auth.auth import Auth
 import re
+import base64
 
 
 class BasicAuth(Auth):
@@ -30,3 +31,25 @@ class BasicAuth(Auth):
         # ):
         #     return authorization_header.split(" ")[-1].strip()
         # return None
+
+    def decode_base64_authorization_header(
+        self, base64_authorization_header: str
+    ) -> str:
+        """Extracts the decoded value of a Base64 string"""
+
+        if type(base64_authorization_header) is str:
+            if self.extract_base64_authorization_header(
+                base64_authorization_header
+            ):
+                base64_authorization_header = (
+                    self.extract_base64_authorization_header(
+                        base64_authorization_header
+                    )
+                )
+            try:
+                header_encode_str = base64_authorization_header.encode("ascii")
+                output = base64.b64decode(header_encode_str, validate=True)
+                return output.decode("ascii")
+            except Exception:
+                pass
+        return None
