@@ -25,8 +25,7 @@ class BasicAuth(Auth):
         # regex instead
         if (
             type(authorization_header) is str and
-            authorization_header.startswith("Basic ") and
-            authorization_header.count(" ") == 1
+            authorization_header.startswith("Basic ")
             ):
             return authorization_header.split(" ")[-1].strip()
         return None
