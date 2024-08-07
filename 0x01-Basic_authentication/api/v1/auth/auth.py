@@ -33,6 +33,12 @@ class Auth:
         """
         auth_user = self.authorization_header(request)
         # print(f"{auth_user=}")
+        # print("User:", os.getenv('AUTH_TYPE'))
         if auth_user == os.getenv("AUTH_TYPE"):
             return auth_user
         return None
+
+
+class BasicAuth(Auth):
+    """Class BasicAuth"""
+    pass
