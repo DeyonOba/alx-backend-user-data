@@ -4,6 +4,7 @@
 from flask import request
 from typing import List, TypeVar
 import os
+User = TypeVar("User")
 
 
 class Auth:
@@ -26,8 +27,10 @@ class Auth:
             return request.headers.get('Authorization')
         return request
 
-    def current_user(self, request=None) -> TypeVar('User'):
-        """Not implemented yet."""
+    def current_user(self, request=None) -> User:
+        """
+        Gets the current user from the request Authentication type.
+        """
         auth_user = self.authorization_header(request)
         # print(f"{auth_user=}")
         if auth_user == os.getenv("AUTH_TYPE"):
