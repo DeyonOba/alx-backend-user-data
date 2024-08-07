@@ -14,7 +14,7 @@ class BasicAuth(Auth):
         Gets the Base64 part of the Authorization header
         for a Basic Authentication.
         """
-        # pattern = "Basic (.+)"
+        # pattern = r"Basic\s+(.+)"
         # PATTERN = re.compile(pattern)
         # if type(authorization_header) is str:
         #     match = re.match(PATTERN, authorization_header)
@@ -28,5 +28,5 @@ class BasicAuth(Auth):
             authorization_header.startswith("Basic ") and
             authorization_header.count(" ") == 1
             ):
-            return authorization_header.split(" ")[-1]
+            return authorization_header.split(" ")[-1].strip()
         return None
