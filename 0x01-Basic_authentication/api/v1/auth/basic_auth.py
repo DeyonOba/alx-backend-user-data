@@ -10,6 +10,10 @@ class BasicAuth(Auth):
     def extract_base64_authorization_header(
          self, authorization_header: str
     ) -> str:
+        """
+        Gets the Base64 part of the Authorization header
+        for a Basic Authentication.
+        """
         pattern = r"Basic\s(.+)"
         PATTERN = re.compile(pattern)
         if type(authorization_header) is str:
