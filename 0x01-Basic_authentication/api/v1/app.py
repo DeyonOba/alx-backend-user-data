@@ -21,6 +21,9 @@ if os.getenv('AUTH_TYPE'):
 
 @app.before_request
 def handle_before_request():
+    """
+    Handle authentication before request.
+    """
     # print("Handle authorization before request.")
 
     if auth:
