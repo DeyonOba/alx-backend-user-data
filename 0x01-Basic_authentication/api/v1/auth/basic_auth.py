@@ -2,8 +2,27 @@
 """Module containing BasicAuth functionality.
 """
 from api.v1.auth.auth import Auth
+import re
 
 
 class BasicAuth(Auth):
     """Class BasicAuth"""
-    pass
+    def extract_base64_authorization_header(
+         self, authorization_header: str
+    ) -> str:
+        pattern = r"Basic\s(.+)"
+        PATTERN = re.compile(pattern)
+        if type(authorization_header) is str:
+            match = re.match(PATTERN, authorization_header)
+            if match:
+                return match.group(1)
+        return None
+        # Solution below is still correct but want to try out regex
+        # instead
+        # if (
+        #     type(authorization_header) is str and
+        #     authorization_header.startswith("Basic ") and
+        #     authorization_header.count(" ") == 1
+        #     ):
+        #     return authorization_header.split(" ")[-1].strip()
+        # return None
