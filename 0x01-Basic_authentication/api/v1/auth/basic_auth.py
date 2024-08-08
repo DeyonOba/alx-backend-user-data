@@ -4,6 +4,7 @@
 from api.v1.auth.auth import Auth
 import re
 import base64
+from typing import Tuple, Union
 
 
 class BasicAuth(Auth):
@@ -53,3 +54,18 @@ class BasicAuth(Auth):
             except Exception:
                 pass
         return None
+
+    def extract_user_credentials(
+        self, decoded_base64_authorization_header: str
+    ) -> Union[Tuple[str, str], Tuple[None, None]]:
+        """
+        Extracts users email and password from the Base64 decoded value.
+        """
+        if type(decoded_base64_authorization_header) is str:
+            if (
+                decoded_base64_authorization_header.count(":") == 1
+                and not decoded_base64_authorization_header.startswith(":")
+                and not decoded_base64_authorization_header.endswith(":")
+            ):
+                return tuple(decoded_base64_authorization_header.split(":"))
+        return None, None
