@@ -4,7 +4,9 @@
 from api.v1.auth.auth import Auth
 import re
 import base64
-from typing import Tuple, Union
+from typing import Tuple, Union, TypeVar
+from models.user import User
+import hashlib
 
 
 class BasicAuth(Auth):
@@ -69,3 +71,29 @@ class BasicAuth(Auth):
             ):
                 return tuple(decoded_base64_authorization_header.split(":"))
         return None, None
+
+    def user_object_from_credentials(
+        self, user_email: str, user_pwd: str
+    ) -> User:
+        """
+        Get User instance based on email and password.
+        """
+        if type(user_email) is str and type(user_pwd) is str:
+            valid_password = (
+                hashlib.sha256(user_pwd.encode())
+                .hexdigest().lower()
+            )
+            user_details = {
+                "email": user_email,
+                "password": valid_password
+            }
+            User.load_from_file()
+            attributes = User.search(attributes=user_details)
+            if attributes:
+                obj = attributes[0].__dict__
+                return User.get(obj["id"])
+        return None
+
+    def current_user(self, request=None) -> User:
+        """Not implemented yet."""
+        pass
