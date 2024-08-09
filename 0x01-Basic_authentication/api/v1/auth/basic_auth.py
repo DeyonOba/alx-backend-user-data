@@ -65,11 +65,11 @@ class BasicAuth(Auth):
         """
         if type(decoded_base64_authorization_header) is str:
             if (
-                decoded_base64_authorization_header.count(":") == 1
+                decoded_base64_authorization_header.count(":") >= 1
                 and not decoded_base64_authorization_header.startswith(":")
                 and not decoded_base64_authorization_header.endswith(":")
             ):
-                return tuple(decoded_base64_authorization_header.split(":"))
+                return tuple(decoded_base64_authorization_header.split(":", 1))
         return None, None
 
     def user_object_from_credentials(
