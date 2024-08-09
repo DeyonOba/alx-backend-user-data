@@ -95,5 +95,32 @@ class BasicAuth(Auth):
         return None
 
     def current_user(self, request=None) -> User:
-        """Not implemented yet."""
-        pass
+        """Get current users object from storage."""
+        if not request:
+            return None
+        auth_header = self.authorization_header(request)
+        if not auth_header:
+            return None
+        extract_base64_auth_header = (
+            self.extract_base64_authorization_header(auth_header)
+            )
+        if not extract_base64_auth_header:
+            return None
+        decode_base64_auth_header = (
+            self.decode_base64_authorization_header(
+                extract_base64_auth_header
+            )
+        )
+        if not decode_base64_auth_header:
+            return None
+        extract_user_credential = self.extract_user_credentials(
+            decode_base64_auth_header
+        )
+        if not extract_user_credential[0]:
+            return None
+        user_object_credential = self.user_object_from_credentials(
+            *extract_user_credential
+        )
+        if not user_object_credential:
+            return None
+        return user_object_credential
