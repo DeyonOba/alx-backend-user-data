@@ -2,9 +2,9 @@
 """Module containing Authentication functionality.
 """
 from flask import request
-from typing import List, TypeVar
+from typing import List
 import os
-User = TypeVar("User")
+# User = Typevar("User")
 
 
 class Auth:
@@ -17,7 +17,9 @@ class Auth:
             return True
 
         for x_path in excluded_paths:
-            if path.rstrip('/') == x_path.rstrip('/'):
+            if x_path.endswith("*"):
+                return x_path[:-1] in path
+            elif path.rstrip('/') == x_path.rstrip('/'):
                 return False
         return True
 
@@ -27,7 +29,7 @@ class Auth:
             return request.headers.get('Authorization')
         return request
 
-    def current_user(self, request=None) -> User:
+    def current_user(self, request=None):
         """
         Gets the current user from the request Authentication type.
         """
@@ -37,8 +39,3 @@ class Auth:
         if auth_user == os.getenv("AUTH_TYPE"):
             return auth_user
         return None
-
-
-class BasicAuth(Auth):
-    """Class BasicAuth"""
-    pass
