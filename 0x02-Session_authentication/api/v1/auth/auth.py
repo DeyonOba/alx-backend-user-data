@@ -39,3 +39,10 @@ class Auth:
         if auth_user == os.getenv("AUTH_TYPE"):
             return auth_user
         return None
+
+    def session_cookie(self, request=None):
+        """Gets the cookie value from a request."""
+        if request and os.getenv("SESSION_NAME"):
+            session_name = os.getenv("SESSION_NAME")
+            return request.cookies.get(session_name)
+        return None
