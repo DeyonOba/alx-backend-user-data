@@ -38,13 +38,15 @@ def handle_before_request():
             '/api/v1/status/',
             '/api/v1/unauthorized/',
             '/api/v1/forbidden/',
+            '/api/v1/auth_session/login/',
         ]
         path = auth.require_auth(request.path, exclude_path)
         # print(f"{path=}")
         if path:
             auth_type = auth.authorization_header(request)
+            session_cookie = auth.session_cookie(request)
             # print(f"{auth_type=}")
-            if not auth_type:
+            if auth_type is None and session_cookie is None:
                 abort(401)
             current_user = auth.current_user(request)
             # print(f"{current_user=}")
