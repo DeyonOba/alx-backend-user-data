@@ -53,14 +53,27 @@ class DB:
             NoResultFound: when record is not withing the table.
             InvalidRequestError: when wrong query arguments are passed.
         """
-        users = self._session.query(User)
-
         for key, value in kwargs.items():
 
             if key not in User.__dict__:
                 raise InvalidRequestError
 
-            for user in users:
-                if getattr(user, key) == value:
-                    return user
+        users = self._session.query(User)
+
+        for user in users:
+            valid_value = True
+            for key, value in kwargs.items():
+                if getattr(user, key) != value:
+                    valid_value = False
+            if valid_value:
+                return user
+
         raise NoResultFound
+
+    def update_user(self, user_id, **kwargs):
+        """pass on doc."""
+
+        # try:
+        #     user = self.find_user_by(kwargs)
+        # except InvalidRequestError, NoResultFound
+        pass
