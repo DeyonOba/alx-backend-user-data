@@ -71,9 +71,18 @@ class DB:
         raise NoResultFound
 
     def update_user(self, user_id, **kwargs):
-        """pass on doc."""
+        """
+        Updates user attributes using the passed arguments method
+        """
 
-        # try:
-        #     user = self.find_user_by(kwargs)
-        # except InvalidRequestError, NoResultFound
-        pass
+        try:
+            user = self.find_user_by(id=user_id)
+        except (InvalidRequestError, NoResultFound):
+            raise ValueError
+
+        for key, value in kwargs.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+                self._session.commit()
+            else:
+                raise ValueError
