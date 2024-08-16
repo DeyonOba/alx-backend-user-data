@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """DB module
 """
 from sqlalchemy import create_engine
@@ -83,6 +84,6 @@ class DB:
         for key, value in kwargs.items():
             if hasattr(user, key):
                 setattr(user, key, value)
-                self._session.commit()
             else:
                 raise ValueError
+        self._session.commit()
