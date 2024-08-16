@@ -66,7 +66,7 @@ class Auth:
         user = self._db.add_user(email, hashed_password.decode('utf-8'))
         return user
 
-    def valid_login(email: str, password: str) -> bool:
+    def valid_login(self, email: str, password: str) -> bool:
         """
         Finds user in database using the email, check if the hashed
         password is a match with the password given.
