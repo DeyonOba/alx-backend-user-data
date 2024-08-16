@@ -20,7 +20,11 @@ class DB:
         Initialize a new DB instance
         """
         self._engine = create_engine("sqlite:///a.db", echo=False)
-        Base.metadata.drop_all(self._engine)
+        # Drops all tables stored in `Base.metadata`
+        # For user verification when registering users we
+        # would need to retain all the data include tables defined
+        # in the SQLAlchemy models associated with the `Base` class.
+        # Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
 
