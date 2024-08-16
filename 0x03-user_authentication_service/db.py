@@ -43,7 +43,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> User:
         """
         Retrieve the first record that matches the value of each column.
 
@@ -54,22 +54,15 @@ class DB:
             NoResultFound: when record is not withing the table.
             InvalidRequestError: when wrong query arguments are passed.
         """
-        for key, value in kwargs.items():
-
+        for key in kwargs:
             if key not in User.__dict__:
                 raise InvalidRequestError
 
-        users = self._session.query(User)
+        user = self._session.query(User).filter_by(**kwargs).first()
 
-        for user in users:
-            valid_value = True
-            for key, value in kwargs.items():
-                if getattr(user, key) != value:
-                    valid_value = False
-            if valid_value:
-                return user
-
-        raise NoResultFound
+        if not user:
+            raise NoResultFound
+        return user
 
     def update_user(self, user_id, **kwargs):
         """
