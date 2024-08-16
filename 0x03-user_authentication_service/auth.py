@@ -80,8 +80,8 @@ class Auth:
                 False if there is not.
         """
         try:
-            user = self._db.find_user_by(email)
-        except ValueError:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
             return False
         hashed_pwd = user.hashed_password.encode("utf-8")
 
