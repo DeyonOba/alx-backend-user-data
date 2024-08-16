@@ -58,7 +58,7 @@ class Auth:
         except NoResultFound:
             user = None
 
-        if isinstance(user, User):
+        if user:
             raise ValueError(f"User {email} already exists")
 
         hashed_password = _hash_password(password)
