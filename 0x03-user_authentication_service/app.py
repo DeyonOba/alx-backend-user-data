@@ -22,6 +22,21 @@ def index():
 
 @app.route("/users", methods=['POST'])
 def register_users():
+    """
+    Handles user registeration.
+
+    If user is not registered (i.e. not found in the database "a.db")
+    payload should return a jsonified output.
+
+        `Status Code`: 200 OK
+        {"email": "<registered email>", "message": "user created"}
+
+    If user already has already been registered with the same email
+    payload should return a jsonified output.
+
+        `Status Code`: 400 BAD REQUEST
+        {"message": "email already registered"}
+    """
     from auth import Auth
 
     Auth = Auth()
