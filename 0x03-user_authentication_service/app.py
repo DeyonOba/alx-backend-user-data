@@ -2,6 +2,7 @@
 """
 Basic Flask app module.
 """
+from auth import Auth
 from flask import (
     Flask,
     jsonify,
@@ -10,6 +11,7 @@ from flask import (
     make_response
 )
 
+Auth = Auth()
 app = Flask(__name__)
 
 
@@ -43,9 +45,6 @@ def register_users():
         `Status Code`: 400 BAD REQUEST
         {"message": "email already registered"}
     """
-    from auth import Auth
-
-    Auth = Auth()
     email = request.form.get("email")
     password = request.form.get("password")
 
@@ -83,9 +82,6 @@ def login():
                 {"email": "<user email>", "message": "logged in"}
             ERROR: STATUS CODE 401 Unauthorized
     """
-    from auth import Auth
-
-    Auth = Auth()
     email = request.form.get("email")
     password = request.form.get("password")
 
