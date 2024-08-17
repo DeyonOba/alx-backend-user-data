@@ -2,8 +2,16 @@
 """
 Basic Flask app module.
 """
-from flask import Flask, jsonify, request
+from auth import Auth
+from flask import (
+    Flask,
+    jsonify,
+    request,
+    abort,
+    make_response
+)
 
+Auth = Auth()
 app = Flask(__name__)
 
 
@@ -37,10 +45,6 @@ def register_users():
         `Status Code`: 400 BAD REQUEST
         {"message": "email already registered"}
     """
-    from auth import Auth
-
-    Auth = Auth()
-
     email = request.form.get("email")
     password = request.form.get("password")
 
@@ -56,6 +60,43 @@ def register_users():
         "message": "user created"
     }
     return jsonify(payload)
+
+
+@app.route("/sessions", methods=['POST'])
+def login():
+    """
+    Handles user login.
+
+    The request is expected to contain form data with "email" and
+    a "password" fields.
+    If the login information is incorrect, use `flask.abort` to respond
+    with a 401 HTTP status. Otherwise, create a new session for the user,
+    and store it the session ID as a cookie with the key "session_Id" on
+    the response and return a JSON payload of the form.
+
+    POST '/session'
+
+    Returns:
+        response:
+            SUCCESS: STATUS CODE 200 OK
+                {"email": "<user email>", "message": "logged in"}
+            ERROR: STATUS CODE 401 Unauthorized
+    """
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    if not Auth.valid_login(email, password):
+        abort(401)
+
+    session_id = Auth.create_session(email)
+
+    if not session_id:
+        abort(401)
+
+    payload = {"email": f"{email}", "message": "logged in"}
+    response = make_response(jsonify(payload))
+    response.set_cookie("session_id", session_id)
+    return response
 
 
 if __name__ == "__main__":
