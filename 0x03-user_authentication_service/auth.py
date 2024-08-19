@@ -163,6 +163,8 @@ class Auth:
         Returns:
             token(str): User's reset password token
         """
+        if not email:
+            raise ValueError
         try:
             user = self._db.find_user_by(email=email)
             token = _generate_uuid()
