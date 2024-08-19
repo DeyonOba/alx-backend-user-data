@@ -152,3 +152,21 @@ class Auth:
             self._db.update_user(user.id, session_id=None)
         except NoResultFound:
             return
+
+    def get_reset_password_token(self, email: str) -> str:
+        """
+        Generates a UUID and updates the user's `reset_token` database field.
+
+        Args:
+            email(str): User's email
+
+        Returns:
+            token(str): User's reset password token
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+            token = _generate_uuid()
+            self._db.update_user(reset_token=token)
+            return token
+        except NoResultFound:
+            raise ValueError
